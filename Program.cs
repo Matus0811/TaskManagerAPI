@@ -1,4 +1,3 @@
-using Microsoft.Extensions.FileSystemGlobbing.Internal.Patterns;
 using Scalar.AspNetCore;
 using TaskManagerAPI.DTOs;
 using TaskManagerAPI.Models;
@@ -39,8 +38,12 @@ app.MapGet("api/tasks/{id}", (int id, ITaskService taskService) =>
 
 app.MapPost("api/tasks", (CreateTaskRequest request, ITaskService taskService) =>
 {
+    if (string.IsNullOrWhiteSpace(request.Title))
+    {
+        return Results.BadRequest("Title is required");
+    }
     TaskItem task = taskService.Create(request);
-    return Results.Created($"/api/tasks{task.Id}", task);
+    return Results.Created($"/api/tasks/{task.Id}", task);
 });
 
 app.Run();
