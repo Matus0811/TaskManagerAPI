@@ -19,4 +19,9 @@ public class TaskService: ITaskService
     {
         return _tasks;
     }
+
+    public TaskItem? GetById(int id)
+    {
+       return _tasks.FirstOrDefault(t => t.Id == id );
+    }
 }
