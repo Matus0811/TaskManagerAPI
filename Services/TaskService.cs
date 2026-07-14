@@ -1,4 +1,5 @@
 using TaskManagerAPI.Models;
+using TaskManagerAPI.DTOs;
 
 namespace TaskManagerAPI.Services;
 
@@ -23,5 +24,16 @@ public class TaskService: ITaskService
     public TaskItem? GetById(int id)
     {
        return _tasks.FirstOrDefault(t => t.Id == id );
+    }
+
+    public TaskItem Create(CreateTaskRequest request)
+    {
+        int id = _tasks.Count;
+        id += 1;
+        TaskItem newTask = new TaskItem(id, request.Title, request.Description);
+
+        _tasks.Add(newTask);
+        
+        return newTask;
     }
 }
