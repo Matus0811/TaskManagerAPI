@@ -17,28 +17,6 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
-app.MapGet("api/tasks/{id}", (int id, ITaskService taskService) =>
-{
-   
-    TaskItem? task = taskService.GetById(id);
-
-    if (task == null)
-    {
-        return Results.NotFound();
-    }
-    return Results.Ok(task);
-});
-
-app.MapPost("api/tasks", (CreateTaskRequest request, ITaskService taskService) =>
-{
-    if (string.IsNullOrWhiteSpace(request.Title))
-    {
-        return Results.BadRequest("Title is required");
-    }
-    TaskItem task = taskService.Create(request);
-    return Results.Created($"/api/tasks/{task.Id}", task);
-});
-
 app.MapControllers();
 
 app.Run();
