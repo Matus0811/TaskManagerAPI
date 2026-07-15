@@ -20,23 +20,25 @@ public class TaskItem
         Status = TaskStatus.InProgress;
     }
 
-    public void Complete()
+    public bool Complete()
     {
         if (Status == TaskStatus.Cancelled)
         {
-            throw new InvalidOperationException("Cannot change the status of a canceled task to completed");
+            return false;
         }
         Status = TaskStatus.Completed;
+        return true;
     }
 
-    public void Cancel()
+    public bool Cancel()
     {
         
-        if (Status == TaskStatus.Cancelled)
+        if (Status == TaskStatus.Completed)
         {
-            throw new InvalidOperationException("Cannot change the status completed of a  task to canceled");
+            return false;
         }
         Status = TaskStatus.Cancelled;
+        return true;
 
     }
 }

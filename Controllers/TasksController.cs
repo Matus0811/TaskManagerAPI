@@ -63,4 +63,40 @@ public class TasksController: ControllerBase
         }
         return NoContent();
     }
+
+    [HttpPatch("{id}/start")]
+    public IActionResult StartTask(int id)
+    {
+        bool started = _taskService.Start(id);
+
+        if(!started)
+        {
+            return NotFound();
+        }
+        return NoContent();
+    }
+    
+    [HttpPatch("{id}/complete")]
+    public IActionResult CompleteTask(int id)
+    {
+        bool completed = _taskService.Complete(id);
+
+        if(!completed)
+        {
+            return NotFound();
+        }
+        return NoContent();
+    }
+
+    [HttpPatch("{id}/cancel")]
+    public IActionResult CancelTask(int id)
+    {
+        bool canceled = _taskService.Cancel(id);
+
+        if(!canceled)
+        {
+            return NotFound();
+        }
+        return NoContent();
+    }
 }

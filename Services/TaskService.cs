@@ -58,7 +58,50 @@ public class TaskService: ITaskService
         {
             return false;
         }
+
         _tasks.Remove(task);
+
+        return true;
+    }
+
+    public bool Start(int id)
+    {
+        TaskItem? task = GetById(id);
+
+        if (task == null)
+        {
+            return false;
+        }
+        
+        task.Start();
+
+        return true;
+    }
+
+    public bool Complete(int id)
+    {
+        TaskItem? task = GetById(id);
+
+        if (task == null)
+        {
+            return false;
+        }
+        
+        task.Complete();
+
+        return true;
+    }
+
+    public bool Cancel(int id)
+    {
+        TaskItem? task = GetById(id);
+
+        if (task == null)
+        {
+            return false;
+        }
+        
+        task.Cancel();
 
         return true;
     }

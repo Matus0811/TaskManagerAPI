@@ -13,4 +13,7 @@ public interface ITaskService
     bool Update(int id, UpdateTaskRequest request);
 
     bool Delete(int id);
+    bool Start(int id);
+    bool Complete(int id);
+    bool Cancel (int id);
 }
