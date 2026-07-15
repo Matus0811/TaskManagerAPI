@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
 builder.Services.AddSingleton<ITaskService, TaskService>();
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
@@ -15,14 +16,6 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.MapScalarApiReference();
 }
-
-app.UseHttpsRedirection();
-
-app.MapGet("api/tasks", (ITaskService taskService) =>
-{
-    return taskService.GetAll();
-});
-
 
 app.MapGet("api/tasks/{id}", (int id, ITaskService taskService) =>
 {
@@ -45,6 +38,8 @@ app.MapPost("api/tasks", (CreateTaskRequest request, ITaskService taskService) =
     TaskItem task = taskService.Create(request);
     return Results.Created($"/api/tasks/{task.Id}", task);
 });
+
+app.MapControllers();
 
 app.Run();
 
