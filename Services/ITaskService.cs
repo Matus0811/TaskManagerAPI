@@ -9,4 +9,8 @@ public interface ITaskService
     TaskItem? GetById(int id);
 
     TaskItem Create(CreateTaskRequest request);
+
+    bool Update(int id, UpdateTaskRequest request);
+
+    bool Delete(int id);
 }

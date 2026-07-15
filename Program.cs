@@ -1,6 +1,4 @@
 using Scalar.AspNetCore;
-using TaskManagerAPI.DTOs;
-using TaskManagerAPI.Models;
 using TaskManagerAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -36,4 +36,30 @@ public class TaskService: ITaskService
         
         return newTask;
     }
-}
+
+    public bool Update(int id, UpdateTaskRequest request)
+    {
+        TaskItem? task = GetById(id);
+        if (task == null)
+        {
+            return false;
+        }
+
+        task.Title = request.Title;
+        task.Description = request.Description;
+
+        return true;
+    }
+
+    public bool Delete(int id)
+    {
+        TaskItem? task = GetById(id);
+        if (task == null)
+        {
+            return false;
+        }
+        _tasks.Remove(task);
+
+        return true;
+    }
+}   

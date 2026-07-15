@@ -39,4 +39,28 @@ public class TasksController: ControllerBase
         TaskItem task = _taskService.Create(request);
         return Created($"/api/tasks/{task.Id}", task);
     }
+
+    [HttpPut("{id}")]
+    public IActionResult Update(int id, UpdateTaskRequest request)
+    {
+        bool updated = _taskService.Update(id,request);
+
+        if(!updated)
+        {
+            return NotFound();
+        }
+        return NoContent();
+    }
+
+    [HttpDelete("{id}")]
+    public IActionResult Delete(int id)
+    {
+        bool deletet = _taskService.Delete(id);
+
+        if(!deletet)
+        {
+            return NotFound();
+        }
+        return NoContent();
+    }
 }

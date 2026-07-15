@@ -4,10 +4,10 @@ public class TaskItem
 {
     public int Id {get; set;}
     public string Title {get;set;}
-    public string Description {get; set;}
+    public string? Description {get; set;}
     public TaskStatus Status {get; private set;}
 
-    public TaskItem (int id, string title, string description)
+    public TaskItem (int id, string title, string? description)
     {
         Id = id;
         Title = title;
