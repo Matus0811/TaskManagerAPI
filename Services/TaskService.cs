@@ -1,38 +1,34 @@
 using TaskManagerAPI.Models;
 using TaskManagerAPI.DTOs;
+using TaskManagerAPI.Data;
 
 namespace TaskManagerAPI.Services;
 
 public class TaskService: ITaskService
 {
-    private readonly List<TaskItem> _tasks;
+    private readonly TaskManagerDbContext _context;
 
-    public TaskService()
+    public TaskService(TaskManagerDbContext context)
     {
-        _tasks = new List<TaskItem>()
-        {
-            new TaskItem(1, "First", "description"),
-            new TaskItem(2, "Second", "descritpion")
-        };
+        _context = context;
     }
-
+    
     public List<TaskItem> GetAll()
     {
-        return _tasks;
+        return _context.Tasks.ToList();
     }
 
     public TaskItem? GetById(int id)
     {
-       return _tasks.FirstOrDefault(t => t.Id == id );
+       return _context.Tasks.FirstOrDefault(t => t.Id == id);
     }
 
     public TaskItem Create(CreateTaskRequest request)
     {
-        int id = _tasks.Count;
-        id += 1;
-        TaskItem newTask = new TaskItem(id, request.Title, request.Description);
+        TaskItem newTask = new TaskItem(request.Title, request.Description);
 
-        _tasks.Add(newTask);
+        _context.Tasks.Add(newTask);
+        _context.SaveChanges();
         
         return newTask;
     }
@@ -47,6 +43,7 @@ public class TaskService: ITaskService
 
         task.Title = request.Title;
         task.Description = request.Description;
+        _context.SaveChanges();
 
         return true;
     }
@@ -59,7 +56,8 @@ public class TaskService: ITaskService
             return false;
         }
 
-        _tasks.Remove(task);
+        _context.Tasks.Remove(task);
+        _context.SaveChanges();
 
         return true;
     }
@@ -74,6 +72,7 @@ public class TaskService: ITaskService
         }
         
         task.Start();
+        _context.SaveChanges();
 
         return true;
     }
@@ -87,7 +86,14 @@ public class TaskService: ITaskService
             return false;
         }
         
-        task.Complete();
+        bool completed = task.Complete();
+
+        if (!completed)
+        {
+            return false;
+        }
+
+        _context.SaveChanges();
 
         return true;
     }
@@ -100,8 +106,15 @@ public class TaskService: ITaskService
         {
             return false;
         }
+
+        bool cancel = task.Cancel();
+
+        if (!cancel)
+        {
+            return false;
+        }
         
-        task.Cancel();
+        _context.SaveChanges();
 
         return true;
     }

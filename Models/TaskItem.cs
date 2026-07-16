@@ -7,9 +7,8 @@ public class TaskItem
     public string? Description {get; set;}
     public TaskStatus Status {get; private set;}
 
-    public TaskItem (int id, string title, string? description)
+    public TaskItem (string title, string? description)
     {
-        Id = id;
         Title = title;
         Description = description;
         Status = TaskStatus.ToDo;
