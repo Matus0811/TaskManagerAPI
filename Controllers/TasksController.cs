@@ -17,15 +17,16 @@ public class TasksController: ControllerBase
     }
     
     [HttpGet]
-    public ActionResult<List<TaskItem>> GetAll()
+    public async Task<ActionResult<List<TaskItem>>> GetAll()
     {
-        return Ok(_taskService.GetAll());
+        List<TaskItem> tasks = await _taskService.GetAll();
+        return Ok(tasks);
     }
 
     [HttpGet("{id}")] 
-    public ActionResult<TaskItem> GetById(int id)
+    public async Task<ActionResult<TaskItem>> GetById(int id)
     {
-        TaskItem? task = _taskService.GetById(id);
+        TaskItem? task = await _taskService.GetById(id);
         if (task == null)
         {
             return NotFound();
@@ -34,16 +35,16 @@ public class TasksController: ControllerBase
     }
     
     [HttpPost]
-    public ActionResult<TaskItem> Create(CreateTaskRequest request)
+    public async Task<ActionResult<TaskItem>> Create(CreateTaskRequest request)
     {
-        TaskItem task = _taskService.Create(request);
+        TaskItem task = await _taskService.Create(request);
         return Created($"/api/tasks/{task.Id}", task);
     }
 
     [HttpPut("{id}")]
-    public IActionResult Update(int id, UpdateTaskRequest request)
+    public async Task<IActionResult> Update(int id, UpdateTaskRequest request)
     {
-        bool updated = _taskService.Update(id,request);
+        bool updated = await _taskService.Update(id,request);
 
         if(!updated)
         {
@@ -53,11 +54,11 @@ public class TasksController: ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
-        bool deletet = _taskService.Delete(id);
+        bool deleted = await _taskService.Delete(id);
 
-        if(!deletet)
+        if(!deleted)
         {
             return NotFound();
         }
@@ -65,9 +66,9 @@ public class TasksController: ControllerBase
     }
 
     [HttpPatch("{id}/start")]
-    public IActionResult StartTask(int id)
+    public async Task<IActionResult> StartTask(int id)
     {
-        bool started = _taskService.Start(id);
+        bool started = await _taskService.Start(id);
 
         if(!started)
         {
@@ -77,9 +78,9 @@ public class TasksController: ControllerBase
     }
     
     [HttpPatch("{id}/complete")]
-    public IActionResult CompleteTask(int id)
+    public async Task<IActionResult> CompleteTask(int id)
     {
-        bool completed = _taskService.Complete(id);
+        bool completed = await _taskService.Complete(id);
 
         if(!completed)
         {
@@ -89,11 +90,11 @@ public class TasksController: ControllerBase
     }
 
     [HttpPatch("{id}/cancel")]
-    public IActionResult CancelTask(int id)
+    public async Task<IActionResult> CancelTask(int id)
     {
-        bool canceled = _taskService.Cancel(id);
+        bool cancelled = await _taskService.Cancel(id);
 
-        if(!canceled)
+        if(!cancelled)
         {
             return NotFound();
         }

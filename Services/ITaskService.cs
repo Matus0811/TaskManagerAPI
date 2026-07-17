@@ -4,16 +4,16 @@ using TaskManagerAPI.Models;
 namespace TaskManagerAPI.Services;
 public interface ITaskService
 {
-    List<TaskItem> GetAll();
+    Task<List<TaskItem>> GetAll();
 
-    TaskItem? GetById(int id);
+    Task<TaskItem?> GetById(int id);
 
-    TaskItem Create(CreateTaskRequest request);
+    Task<TaskItem> Create(CreateTaskRequest request);
 
-    bool Update(int id, UpdateTaskRequest request);
+    Task<bool> Update(int id, UpdateTaskRequest request);
 
-    bool Delete(int id);
-    bool Start(int id);
-    bool Complete(int id);
-    bool Cancel (int id);
+    Task<bool> Delete(int id);
+    Task<bool> Start(int id);
+    Task<bool> Complete(int id);
+    Task<bool> Cancel(int id);
 }

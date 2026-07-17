@@ -1,6 +1,7 @@
 using TaskManagerAPI.Models;
 using TaskManagerAPI.DTOs;
 using TaskManagerAPI.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace TaskManagerAPI.Services;
 
@@ -13,29 +14,29 @@ public class TaskService: ITaskService
         _context = context;
     }
     
-    public List<TaskItem> GetAll()
+    public async Task<List<TaskItem>> GetAll()
     {
-        return _context.Tasks.ToList();
+        return await _context.Tasks.ToListAsync();
     }
 
-    public TaskItem? GetById(int id)
+    public async Task<TaskItem?> GetById(int id)
     {
-       return _context.Tasks.FirstOrDefault(t => t.Id == id);
+       return await _context.Tasks.FirstOrDefaultAsync(t => t.Id == id);
     }
 
-    public TaskItem Create(CreateTaskRequest request)
+    public async Task<TaskItem> Create(CreateTaskRequest request)
     {
         TaskItem newTask = new TaskItem(request.Title, request.Description);
 
         _context.Tasks.Add(newTask);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
         
         return newTask;
     }
 
-    public bool Update(int id, UpdateTaskRequest request)
+    public async Task<bool> Update(int id, UpdateTaskRequest request)
     {
-        TaskItem? task = GetById(id);
+        TaskItem? task = await GetById(id);
         if (task == null)
         {
             return false;
@@ -43,28 +44,28 @@ public class TaskService: ITaskService
 
         task.Title = request.Title;
         task.Description = request.Description;
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
         return true;
     }
 
-    public bool Delete(int id)
+    public async Task<bool> Delete(int id)
     {
-        TaskItem? task = GetById(id);
+        TaskItem? task = await GetById(id);
         if (task == null)
         {
             return false;
         }
 
         _context.Tasks.Remove(task);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
         return true;
     }
 
-    public bool Start(int id)
+    public async Task<bool> Start(int id)
     {
-        TaskItem? task = GetById(id);
+        TaskItem? task = await GetById(id);
 
         if (task == null)
         {
@@ -72,14 +73,14 @@ public class TaskService: ITaskService
         }
         
         task.Start();
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
         return true;
     }
 
-    public bool Complete(int id)
+    public async Task<bool> Complete(int id)
     {
-        TaskItem? task = GetById(id);
+        TaskItem? task = await GetById(id);
 
         if (task == null)
         {
@@ -93,28 +94,28 @@ public class TaskService: ITaskService
             return false;
         }
 
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
         return true;
     }
 
-    public bool Cancel(int id)
+    public async Task<bool> Cancel(int id)
     {
-        TaskItem? task = GetById(id);
+        TaskItem? task = await GetById(id);
 
         if (task == null)
         {
             return false;
         }
 
-        bool cancel = task.Cancel();
+        bool cancelled = task.Cancel();
 
-        if (!cancel)
+        if (!cancelled)
         {
             return false;
         }
         
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
         return true;
     }
